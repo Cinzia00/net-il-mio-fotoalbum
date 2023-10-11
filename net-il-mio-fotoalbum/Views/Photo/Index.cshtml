@@ -1,0 +1,26 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+
+@model List<Photo>
+<div class="container my-5">
+    <a class="btn btn-success"
+       href="@Url.Action("Create", "Photo")">
+        Aggiungi nuova foto
+    </a>
+</div>
+
+<div class="container d-flex flex-wrap gap-3">
+    @foreach (Photo photo in Model)
+    {
+        <div class="card" style="width: 20rem;">
+            <img width="200" src="@photo.Image" class="card-img-top" alt="Foto">
+            <div class="card-body">
+                <h5 class="card-title text-success">@photo.Title</h5>
+                <p class="card-text">@photo.Description</p>
+            </div>
+        </div>
+    }
+
+</div>
