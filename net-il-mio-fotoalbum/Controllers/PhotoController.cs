@@ -121,6 +121,8 @@ namespace net_il_mio_fotoalbum.Controllers
                     }
                 }
 
+                this.SetImageFileFromFormFile(data);
+
                 db.Photos.Add(data.Photos);
                 db.SaveChanges();
 
@@ -215,6 +217,14 @@ namespace net_il_mio_fotoalbum.Controllers
                         }
                     }
 
+
+                    if (data.ImageFormFile != null)
+                    {
+                        MemoryStream stream = new MemoryStream();
+                        data.ImageFormFile.CopyTo(stream);
+                        photoToEdit.ImageFile = stream.ToArray();
+                    }
+
                     db.SaveChanges();
 
                     return RedirectToAction("Index");
@@ -251,6 +261,21 @@ namespace net_il_mio_fotoalbum.Controllers
                 }
             }
         }
+
+
+        private void SetImageFileFromFormFile(PhotoFormModel formData)
+        {
+            if (formData.ImageFormFile == null)
+            {
+                return;
+            }
+
+            MemoryStream stream = new MemoryStream();
+            formData.ImageFormFile.CopyTo(stream);
+            formData.Photos.ImageFile = stream.ToArray();
+
+        }
+
 
     }
 }

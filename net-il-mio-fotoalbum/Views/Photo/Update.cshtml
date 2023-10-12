@@ -25,6 +25,16 @@
                     <span asp-validation-for="Photos.Image" class="text-danger"></span>
                 </div>
 
+                <div class="mb-3">
+                    <div class="my-3">
+                        <img src="@Model.Photos.ImageSrc"/>
+
+                    </div>
+                    <label asp-for="ImageFormFile">Image file</label>
+                    <input type="file" asp-for="ImageFormFile" />
+                    <span asp-validation-for="ImageFormFile" class="text-error"></span>
+                </div>
+
                 <!-- SELECT MULTIPLA PER LE CATEGORIE -->
                 <div class="mb-3">
                     <strong>Ingredienti:</strong>

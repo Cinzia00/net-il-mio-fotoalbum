@@ -39,5 +39,24 @@ namespace net_il_mio_fotoalbum.Controllers.API
                 }
             }
         }
+
+
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
+            using (PhotoContext db = new PhotoContext())
+            {
+                Photo? detailPhoto = db.Photos.Where(photo => photo.Id == id).Include(p => p.Categories).FirstOrDefault();
+
+                if (detailPhoto == null)
+                {
+                    return NotFound("La foto non è stata trovata");
+                }
+                else
+                {
+                    return Ok(detailPhoto);
+                }
+            }
+        }
     }
 }

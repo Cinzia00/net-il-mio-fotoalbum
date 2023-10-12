@@ -6,7 +6,7 @@
         <div class="col-12">
             <h1 class="text-success py-5">Aggiungi nuova foto</h1>
         </div>
-        <form asp-controller="Photo" asp-action="Create" method="post">
+        <form asp-controller="Photo" asp-action="Create" enctype="multipart/form-data" method="post">
             @Html.AntiForgeryToken()
             <div class="mb-3">
                 <strong>Titolo:</strong>
@@ -26,6 +26,13 @@
                 <span asp-validation-for="Photos.Image" class="text-danger"></span>
             </div>
 
+            <div class="mb-3">
+                <label asp-for="ImageFormFile">Image file</label>
+                <input type="file" asp-for="ImageFormFile" />
+                <span asp-validation-for="ImageFormFile" class="text-error"></span>
+            </div>
+
+
             <!-- SELECT MULTIPLA PER LE CATEGORIE -->
             <div class="mb-3">
                 <strong>Seleziona Categoria:</strong>
@@ -38,7 +45,9 @@
             </div>
             <div>
                 Visibile:  
-                <i onclick="myFunction(this)" class="fa fa-thumbs-up text-primary"></i>
+
+                    <i id="icon-visible" onclick="myFunction(this)" class="fa fa-thumbs-up text-primary"></i>
+
             </div>
 
             <button type="submit" class="btn btn-success my-5">Aggiungi</button>
@@ -49,10 +58,20 @@
 
 @section Scripts {
     <script>
-        function myFunction(x) {
-            x.classList.toggle("fa-thumbs-down");
-            return false
+
+        const visibleEl = document.getElementById("icon-visible");
+
+        visibleEl = true;
+
+        function visiblePhoto() {
+            visibleEl.classList.toggle("fa-thumbs-down");
         }
-     
+
+        visibleEl.addEventListener('click', function () {
+
+            visiblePhoto()
+            visibleEl = false
+        }
+
     </script>
 }
