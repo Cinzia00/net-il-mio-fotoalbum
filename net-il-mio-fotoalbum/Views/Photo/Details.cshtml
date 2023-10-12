@@ -1,0 +1,28 @@
+﻿@model Photo
+
+<div class="container-pizza text-center">
+    <div>
+        <img width="400" src="@Model.Image" alt="Foto">
+        <h5 class="py-5 text-success text-uppercase">@Model.Title</h5>
+        <p>@Model.Description</p>
+        @if(Model.Categories != null){
+            <div>
+                <strong>Categorie: </strong>
+                @foreach (Category category in Model.Categories)
+                {
+                    <span>@category.Name</span>
+                    <div class="visible">visibile</div>
+                    <div class="invisible">...</div>
+                }
+            </div>
+        }
+        else
+        {
+            <div>
+                <strong>Categorie: </strong>
+               <p>Nessuna categoria associata</p>
+            </div>
+        }
+
+    </div>
+</div>

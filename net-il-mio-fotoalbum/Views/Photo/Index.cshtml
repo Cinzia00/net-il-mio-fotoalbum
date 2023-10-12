@@ -5,11 +5,18 @@
 
 @model List<Photo>
 <div class="container my-5">
-    <a class="btn btn-success"
-       href="@Url.Action("Create", "Photo")">
-        Aggiungi nuova foto
-    </a>
+    @if (User.IsInRole("ADMIN"))
+    {
+        <a class="btn btn-success"
+           href="@Url.Action("Create", "Photo")">
+            Aggiungi nuova foto
+        </a>
+    }
+
+    <input id="searchPhoto" type="text" class="form-control" placeholder="Cerca foto per titolo">
+
 </div>
+
 
 <div class="container d-flex flex-wrap gap-3">
     @foreach (Photo photo in Model)
@@ -19,8 +26,36 @@
             <div class="card-body">
                 <h5 class="card-title text-success">@photo.Title</h5>
                 <p class="card-text">@photo.Description</p>
+         @*        <p>
+                    <strong>Categorie: </strong>
+                    @foreach (Category category in Model.Categories)
+                    {
+                        <span>@category.Name</span>
+                    }
+                </p> *@
+            </div>
+            <div class="text-center mb-3 d-flex justify-content-center gap-2">
+                <a href="@Url.Action("Details", "Photo", new { id = photo.Id})">
+                    <button type="submit" class="btn btn-outline-secondary btn-sm">Vedi dettagli</button>
+                </a>
+                @if (User.IsInRole("ADMIN"))
+                {
+                    <a href="@Url.Action("Update", "Photo", new { id = photo.Id})">
+                        <button type="submit" class="btn btn-outline-secondary btn-sm">Modifica</button>
+                    </a>
+                    <form asp-controller="Photo" asp-action="Delete" asp-route-id="@photo.Id" method="post">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                            Elimina
+                        </button>
+                    </form>                    
+                }
             </div>
         </div>
     }
 
 </div>
+
+
+
+

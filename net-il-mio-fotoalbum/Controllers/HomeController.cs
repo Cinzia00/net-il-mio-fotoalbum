@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using net_il_mio_fotoalbum.Database;
 using net_il_mio_fotoalbum.Models;
 using System.Diagnostics;
 
@@ -15,7 +16,12 @@ namespace net_il_mio_fotoalbum.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            using (PhotoContext db = new PhotoContext())
+            {
+                List<Photo> photos = db.Photos.ToList();
+
+                return View(photos);
+            }
         }
 
         public IActionResult Privacy()
