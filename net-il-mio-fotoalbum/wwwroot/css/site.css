@@ -15,4 +15,9 @@ html {
 
 body {
   margin-bottom: 60px;
+  background-color: rgb(255 245 211);
+}
+
+.container-image{
+    height:200px;
 }

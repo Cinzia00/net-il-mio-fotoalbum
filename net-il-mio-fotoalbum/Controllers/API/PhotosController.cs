@@ -3,19 +3,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using net_il_mio_fotoalbum.Database;
 using net_il_mio_fotoalbum.Models;
+using System.Diagnostics.Contracts;
 
 namespace net_il_mio_fotoalbum.Controllers.API
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class PhotoController : ControllerBase
+    public class PhotosController : ControllerBase
     {
         [HttpGet]
         public IActionResult GetPhotos()
         {
             using (PhotoContext db = new PhotoContext())
             {
-                List<Photo> photos = db.Photos.Include(c => c.Categories).ToList();
+                List<Photo> photos = db.Photos.ToList();
 
                 return Ok(photos);
             }
@@ -57,6 +58,22 @@ namespace net_il_mio_fotoalbum.Controllers.API
                     return Ok(detailPhoto);
                 }
             }
+        }
+
+
+        [HttpPost]
+        public IActionResult SendMessage([FromBody] Contact data)
+        {
+            using (PhotoContext db = new PhotoContext())
+            {
+                Contact newContact = new Contact(data.Email, data.Message);
+
+                db.Contact.Add(newContact);
+                db.SaveChanges();
+
+                return Ok("Messaggio inviato correttamente");
+            }
+
         }
     }
 }

@@ -43,11 +43,16 @@
                         asp-items="@Model.Categories">
                 </select>
             </div>
-            <div>
-                Visibile:  
-
-                    <i id="icon-visible" onclick="myFunction(this)" class="fa fa-thumbs-up text-primary"></i>
-
+            <div class="visible">
+                Visibile:
+                <di>
+                    <input asp-for="Photos.Visible" type="radio" class="leave" name="Present3" value="true">
+                    <span>Si</span>
+                </di>
+                <di>
+                    <input asp-for="Photos.Visible" type="radio" class="leave" name="Present3" value="false">
+                    <span>No</span>
+                </di>
             </div>
 
             <button type="submit" class="btn btn-success my-5">Aggiungi</button>
@@ -56,22 +61,3 @@
 </div>
 
 
-@section Scripts {
-    <script>
-
-        const visibleEl = document.getElementById("icon-visible");
-
-        visibleEl = true;
-
-        function visiblePhoto() {
-            visibleEl.classList.toggle("fa-thumbs-down");
-        }
-
-        visibleEl.addEventListener('click', function () {
-
-            visiblePhoto()
-            visibleEl = false
-        }
-
-    </script>
-}

@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using net_il_mio_fotoalbum.Database;
 using net_il_mio_fotoalbum.Models;
+using System.Data;
 
 namespace net_il_mio_fotoalbum.Controllers
 {
@@ -89,9 +91,10 @@ namespace net_il_mio_fotoalbum.Controllers
                 using (PhotoContext db = new PhotoContext())
                 {
                     List<SelectListItem> categoryList = new List<SelectListItem>();
-                    List<Category> databasecategoryList = db.Categories.ToList();
+                    List<Category> databaseCategoryList = db.Categories.ToList();
+                    //Photo photoVisible = db.Photos.Where(p => p.Visible == data.Photos.Visible.ToString()).FirstOrDefault();
 
-                    foreach (Category category in databasecategoryList)
+                    foreach (Category category in databaseCategoryList)
                     {
                         categoryList.Add(
                             new SelectListItem

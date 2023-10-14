@@ -2,11 +2,30 @@
 <div class="container">
 
     <input id="searchPhoto" type="text" class="form-control" placeholder="Cerca foto per titolo">
+    <div id="spinner" class="my-4 visible">
+        <div class="spinner-border text-success" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <span class="text-success">Sto caricando le foto</span>
+    </div>
 
-    <div id="container-card" class="d-flex flex-wrap my-5 gap-3">
+
+    <div id="container-card" class="d-flex flex-wrap my-5 gap-5">
 
     </div>
 
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Messaggio</label>
+            <input type="text" class="form-control" id="exampleInputMessage">
+        </div>
+        <button id="send-message-button" type="submit" class="btn btn-success">Submit</button>
+
+    
 </div>
 
 
@@ -14,24 +33,31 @@
 
 @section Scripts {
     <script type="text/javascript">
+        const spinnerEl = document.getElementById("spinner");
 
         const cardEl = document.getElementById("container-card");
 
         const inputEL = document.getElementById("searchPhoto");
         inputEL.addEventListener("keyup", searchPhoto);
 
+
+        const sendMessageButton = document.getElementById("send-message-button")
+        sendMessageButton.addEventListener("click", sendMessage)
+
         getPhoto();
 
         function getPhoto() {
+            axios.get('/api/Photos/GetPhotos').then((res) => {
+                //console.log(res)
+                if (res.data.length > 0) {
 
-            axios.get('/api/Photo/GetPhotos').then((res) => {
-                console.log(res)
+                    spinnerEl.classList.add("d-none");
+                }
 
                 res.data.forEach(photo => {
-
-                    cardEl.innerHTML +=
-                       `
-                    
+                    if (photo.visible) {
+                        cardEl.innerHTML +=
+                        `
                         <div class="card" style="width: 20rem;"">
                             <img src="${photo.imageSrc}" class="card-img-top" alt="Immagine ${photo.title}">
                             <div class="card-body">
@@ -39,8 +65,8 @@
                                 <p class="card-text">${photo.description}</p>
                             </div>
                         </div>
-                        
-                       `
+                         `
+                    }
                 });
             })
         }
@@ -48,33 +74,47 @@
 
         function searchPhoto(event) {
             const searchParam = event.target.value;
+            cardEl.innerHTML = ""
 
-            axios.get('/api/Photo/SearchByTitle', {
+            axios.get('/api/Photos/SearchByTitle', {
                 params: {
                     search: searchParam
                 }
             }).then((res) => {
-
                 console.log(res);
 
-                res.data.foreach(photo => {
-
-                    cardEl = ""
-
+                res.data.forEach(photo => {
+                    console.log(photo)
                     cardEl.innerHTML +=
                     `
                     <div class="card" style="width: 20rem;">
-                        <img width="200" src="${photo.ImageSrc}" class="card-img-top" alt="Foto">
+                        <img width="200" src="${photo.imageSrc}" class="card-img-top" alt="Foto">
                         <div class="card-body">
                             <h5 class="card-title text-success">${photo.title}</h5>
-                            <p class="card-text">${photo.Description}</p>
+                            <p class="card-text">${photo.description}</p>
                         </div>
                         </div>
                     </div>
-                    `            
+                    `
+                
                 })
 
+            }).catch((error) => {
+                console.error(error);
+            });
+        }
+
+
+        function sendMessage() {
+            const emailUser = document.getElementById("exampleInputEmail1").value;
+            const messagelUser = document.getElementById("exampleInputMessage").value;
+            axios.post('/api/Photos/SendMessage', {
                 
+                    Email: emailUser,
+                    Message: messagelUser
+                
+            }).then((res) => {
+                alert("Messaggio inviato con successo!")
             }).catch((error) => {
                 console.error(error);
             });
